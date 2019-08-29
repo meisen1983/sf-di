@@ -1,16 +1,23 @@
 services:
-  logger:
-    class: Monolog\Logger
-    arguments:
-      - 'main'
-      -
-        - '@logger.stream_handler'
-    calls:
-      -
-        - 'pushHandler'
-        -
-          - '@logger.std_out_handler'
-      -
-        - 'debug'
-        -
-          - 'Logger just got started'
+    logger:
+        class: Monolog\Logger
+        arguments:
+            - 'main'
+            -
+                - '@logger.stream_handler'
+        calls:
+            -
+                - 'pushHandler'
+                - ['@logger.std_out_handler']
+            -
+                - 'debug'
+                - ['Logger just got started']
+        public: true
+    logger.std_out_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments:
+            - 'php://stdout'
+    logger.stream_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments:
+            - '%root_dir%/dino.log'
